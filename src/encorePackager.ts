@@ -46,6 +46,7 @@ export class EncorePackager {
       });
       serviceAccessToken = await ctx.getServiceAccessToken('encore');
     }
+    console.log('SAT:', serviceAccessToken);
     const dest = this.getPackageDestination(job);
     const packageFormatOptions = this.getPackageFormatOptions(job);
     await doPackage({
