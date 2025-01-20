@@ -11,6 +11,7 @@ import { Context } from '@osaas/client-core';
 import logger from './logger';
 
 export interface EncoreJob {
+  externalId?: string;
   id: string;
   status: string;
   output?: Output[];
@@ -93,10 +94,12 @@ export class EncorePackager {
     return packageFormatOptions;
   }
 
+  // This is problematic, because it doesn't respect the external ID.
   resolveTemplate(template: string, job: EncoreJob) {
     const inputUri = job.inputs[0].uri;
     const inputBasename = basename(inputUri, extname(inputUri));
     return template
+      .replaceAll('$EXTERNALID$', job.externalId ? job.externalId : '')
       .replaceAll('$JOBID$', job.id)
       .replaceAll('$INPUTNAME$', inputBasename);
   }
