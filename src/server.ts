@@ -4,6 +4,7 @@ import { EncorePackager } from './encorePackager';
 import { Config } from './config';
 import { PackageListener } from './packageListener';
 import logger from './logger';
+import { CallbackListener } from './callbackListener';
 
 async function loadPackageListener(
   pluginPath: string | undefined
@@ -26,9 +27,18 @@ async function loadPackageListener(
 }
 
 export async function startListener(config: Config) {
-  const packageListener = await loadPackageListener(
+  let packageListener = await loadPackageListener(
     config.packaging.packageListenerPlugin
   );
+
+  if (!packageListener && config.callback.url) {
+    packageListener = new CallbackListener(
+      config.callback.url,
+      config.callback.user,
+      config.callback.password,
+      config.packaging.oscAccessToken
+    );
+  }
 
   const encorePackager = new EncorePackager(config.packaging);
   logger.info('Starting redis listener');
