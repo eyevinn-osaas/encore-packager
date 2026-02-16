@@ -90,7 +90,7 @@ export class RedisListener {
         );
         this.onPackageStart(parsedMessage.url, parsedMessage.jobId);
         const onMessageResult = await this.onMessage(parsedMessage);
-        this.onPackageDone(
+        await this.onPackageDone(
           parsedMessage.url,
           parsedMessage.jobId,
           onMessageResult ? onMessageResult : undefined
@@ -102,7 +102,7 @@ export class RedisListener {
       logger.error(
         `Error when handling message ${message}: ${(e as Error)?.message}`
       );
-      this.onPackageFail(message, e);
+      await this.onPackageFail(message, e);
     }
   }
 
@@ -165,9 +165,9 @@ export class RedisListener {
     }
   }
 
-  onPackageDone(jobUrl: string, jobId: string, outputPath?: string) {
+  async onPackageDone(jobUrl: string, jobId: string, outputPath?: string) {
     try {
-      this.packageListener?.onPackageDone?.(jobUrl, jobId, outputPath);
+      await this.packageListener?.onPackageDone?.(jobUrl, jobId, outputPath);
     } catch (err) {
       logger.warn(
         `Error when calling onPackageDone: ${(err as Error).message}`
@@ -176,9 +176,9 @@ export class RedisListener {
   }
 
   //eslint-disable-next-line @typescript-eslint/no-explicit-any
-  onPackageFail(message: string, err: any, jobId?: string) {
+  async onPackageFail(message: string, err: any, jobId?: string) {
     try {
-      this.packageListener?.onPackageFail?.(message, err);
+      await this.packageListener?.onPackageFail?.(message, err);
     } catch (e) {
       logger.warn(`Error when calling onPackageFail: ${(e as Error).message}`);
     }
