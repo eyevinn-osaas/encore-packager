@@ -1,6 +1,6 @@
 {
   "name": "@eyevinn/encore-packager",
-  "version": "0.15.1",
+  "version": "0.15.2",
   "description": "The default typescript-nodejs template for eyevinn projects",
   "bin": {
     "encore-packager": "./dist/cli.js"
@@ -18,7 +18,7 @@
   },
   "license": "MIT",
   "engines": {
-    "node": ">=23.3.0"
+    "node": ">=26.0.0"
   },
   "dependencies": {
     "@eyevinn/shaka-packager-s3": "^0.6.3",
